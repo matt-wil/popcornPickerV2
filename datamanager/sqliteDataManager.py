@@ -1,66 +1,87 @@
-from flask_sqlalchemy import SQLAlchemy
+import logging
 from popcornPickerV2.datamanager.dataManagerABC import DataManagerInterface
+from .models import User, Movie, db
 
-
-db = SQLAlchemy()
+# Create a logger instance
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class SQLiteDataManager(DataManagerInterface):
-    def __init__(self, db_file_name):
-        self.db = SQLAlchemy(db_file_name)
-        self.User = self.db.Model.classes.User
-        self.Movie = self.db.Model.classes.Movie
+    def __init__(self, app):
+        self.db = db
+        with app.app_context():
+            self.db.create_all()
 
     def get_all_users(self):
-        return self.db.session.query(self.User).all()
+        try:
+            return User.query.all()
+        except Exception as e:
+            print(f"Error fetching all users: {e}")
+            logger.exception(f"Error fetching all users: {e}")
+            return []
 
     def get_user_movies(self, user_id):
-        return self.db.session.query(self.Movie).filter_by(user_id=user_id)
+        try:
+            return Movie.query.filter_by(user_id=user_id).all()
+        except Exception as e:
+            print(f"Error fetching movies for user {user_id}: {e}")
+            logger.exception(f"Error fetching movies for user {user_id}: {e}")
+            return []
 
     def add_user(self, user_name):
-        # implement later to add OAuth or proper database user/password system
-        new_user = self.User(user_name)
-        self.db.session.add(new_user)
-        self.db.session.commit()
+        # V2 implement OAuth or proper database user/password system
+        try:
+            new_user = User(name=user_name)
+            self.db.session.add(new_user)
+            self.db.session.commit()
+            return new_user
+        except Exception as e:
+            print(f"Error adding user: {e}")
+            logger.exception(f"Error adding user: {e}")
+            self.db.session.rollback()
 
     def add_movie(self, movie_data):
-        # movie data will be the necessary data from the movie class
-        # ID, Title, Director, rating, year, image_link?
-        new_movie = self.Movie(movie_data)
-        self.db.session.add(movie_data)
-        self.db.session.commit()
+        try:
+            new_movie = Movie(**movie_data)
+            self.db.session.add(new_movie)
+            self.db.session.commit()
+            return new_movie
+        except Exception as e:
+            print(f"Error adding movie: {e}")
+            logger.exception(f"Error adding movie: {e}")
+            self.db.session.rollback()
 
     def update_movie(self, movie_id, updated_data):
-        # this will need to be implemented differently
-        movie = self.db.session.query(self.Movie).get(movie_id)
-        for key, value in updated_data.items():
-            setattr(movie, key, value)
-        self.db.session.commit()
+        try:
+            movie = Movie.query.get(movie_id)
+            if not movie:
+                print(f"Movie with ID {movie_id} not found.")
+                return None
+            for key, value in updated_data.items():
+                setattr(movie, key, value)
+            self.db.session.commit()
+            return movie
+        except Exception as e:
+            print(f"Error updating movie: {e}")
+            logger.exception(f"Error updating movie: {e}")
+            self.db.session.rollback()
 
     def delete_movie(self, movie_id):
-        movie = self.db.session.query(self.Movie).get(movie_id)
-        self.db.session.delete(movie)
-        self.db.session.commit()
-
-
-class User(db.Model):
-    __tablename__: str = 'users'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String)
-
-    movies = db.relationship('Movie', back_populates='user')
-
-
-class Movie(db.Model):
-    __tablename__: str = 'movies'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    title = db.Column(db.String)
-    director = db.Column(db.String)
-    year = db.Column(db.Integer(4))
-    rating = db.Column(db.Float)
-    img_url = db.Column(db.String)
-
-    user = db.relationship('User', back_populates='movies')
+        try:
+            movie = Movie.query.get(movie_id)
+            if not movie:
+                print(f"Movie with ID {movie_id} not found.")
+                return False
+            self.db.session.delete(movie)
+            self.db.session.commit()
+            return True
+        except Exception as e:
+            print(f"Error deleting movie: {e}")
+            logger.exception(f"Error deleting movie: {e}")
+            self.db.session.rollback()
+            return False
