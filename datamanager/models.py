@@ -22,5 +22,6 @@ class Movie(db.Model):
     year = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False)
     img_url = db.Column(db.String)
+    link = db.Column(db.String)
     # FOREIGN KEY REFERENCE
     user = db.relationship('User', back_populates='movies')

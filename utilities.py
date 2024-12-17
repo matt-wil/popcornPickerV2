@@ -13,29 +13,39 @@ OMDb_url = "http://www.omdbapi.com/?apikey="
 def retrieve_all_movie_data(title, api=api_key, url=OMDb_url, search_type="&t="):
     """
     Returns the response from the OMDB API plus and full link for the movie
-    :param title: Title of the movie
-    :param api:
-    :param url:
-    :param search_type:
-    :return:
     """
+    if not api:
+        logger.error(
+            f"OMDB API Key not found. Check your Environment Variables")
+        raise ValueError("OMDB API Key not found")
+
     try:
         response = requests.get(url + api + search_type + title)
         response.raise_for_status()
         movie_info = response.json()
-        imdb_id = movie_info["imdbID"]
-        imdb_full_link = f"https://www.imdb.com/title/{imdb_id}/"
+
+        if movie_info.get('Response') != 'True':
+            logger.error(f"Movie not found or invalid title: {title}")
+            return None, None
+
+        imdb_id = movie_info.get("imdbID")
+        if not imdb_id:
+            imdb_full_link = "https://www.imdb.com"
+        else:
+            imdb_full_link = f"https://www.imdb.com/title/{imdb_id}/"
+        logger.info(f"Successfully retrieved movie data for: {title}")
         return movie_info, imdb_full_link
+
     except HTTPError as e:
-        print(
+        logger.exception(
             f"HTTP error occurred: {e} - Status Code: {response.status_code}")
-        logger.exception(f"HTTP error occurred: {e} - Status Code: {response.status_code}")
     except ConnectionError as e:
-        print(f"Connection Error: unable to connect to API {e}")
         logger.exception(f"Connection Error: unable to connect to API {e}")
     except Timeout:
-        print(f"Error request has timed out")
         logger.exception(f"Error request has timed out")
     except RequestException as e:
-        print(f"Ann error occurred: {e}")
         logger.exception(f"Ann error occurred: {e}")
+    except Exception as e:
+        logger.exception(f"Key Error: {e}")
+
+    return None, None

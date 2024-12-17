@@ -26,7 +26,7 @@ def list_users():
 @app.route('/users/<int:user_id>', methods=['GET'])
 def user_movies(user_id):
     users_movies = data_manager.get_user_movies(user_id=user_id)
-    return render_template('user_movies.html', users_movies=users_movies)
+    return render_template('user_movies.html', users_movies=users_movies, user_id=user_id)
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
@@ -44,6 +44,16 @@ def add_movie(user_id):
         movie_title = request.form['title']
 
         movie_info, movie_link = retrieve_all_movie_data(movie_title)
+        if not movie_info or movie_info.get('Response') != 'True':
+            logger.error(f"Failed to fetcha data for movie: {movie_title}")
+            return "Failed to fetch movie data from OMDb API", 400
+
+        existing_movies = data_manager.get_user_movies(user_id)
+        if any(movie.title == movie_info['Title'] for movie in existing_movies):
+            logger.warning(
+                f"Movie '{movie_info['Title']}' already exists for user {user_id}.")
+            return "Movie already exists in the list.", 400
+
         if movie_info['Response'] == 'True':
             movie_entry = {
                 'title': movie_info['Title'],
@@ -55,16 +65,18 @@ def add_movie(user_id):
                 'user_id': user_id
             }
             data_manager.add_movie(movie_entry)
+            logger.info(
+                f"Movie {movie_info['Title']} added successfully for user {user_id}")
             return redirect(url_for('user_movies', user_id=user_id))
-        return "Failed to fetch movie data from OMDb API", 400
     return render_template('add_movie.html', user_id=user_id)
 
 
 @app.route('/users/<int:user_id>/update_movie/<int:movie_id>', methods=['GET', 'POST'])
 def update_movie(user_id, movie_id):
     if request.method == 'POST':
-        key_list = ['title', 'year', 'rating', 'director' ]
-        updated_data = {key: request.form[key] for key in key_list if key in request.form}
+        key_list = ['title', 'year', 'rating', 'director']
+        updated_data = {key: request.form[key]
+                        for key in key_list if key in request.form}
 
         data_manager.update_movie(movie_id, updated_data=updated_data)
         return redirect(url_for('user_movies', user_id=user_id))
@@ -85,6 +97,22 @@ def delete_movie(user_id, movie_id):
     return redirect(url_for('user_movies', user_id=user_id))
 
 
+# error handling
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(405)
+def method_not_allowed_error(error):
+    return render_template('405.html'), 405
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('500.html'), 500
+
+
 if __name__ == '__main__':
     # with app.app_context():
     #     db.session.add(User(name="Matt"))
@@ -93,5 +121,3 @@ if __name__ == '__main__':
     #     db.session.add(User(name="Magdalena"))
     #     db.session.commit()
     app.run(host="0.0.0.0", port=5002, debug=True)
-
-

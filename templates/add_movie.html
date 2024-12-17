@@ -5,13 +5,17 @@
 {% endblock %}
 
 {% block content %}
+<main>
+<div>
     <h1>Add Movie</h1>
+</div>
     <p>Go to <a href="/users">Users Page</a></p>
     <div class="movie-forms">
         <form method="POST">
             <label for="title"></label>
-            <input type="text" id="title" name="title" required>
+            <input type="text" id="title" name="title" placeholder="Movie Title" required>
             <button type="submit">Add Movie</button>
         </form>
     </div>
+</main>
 {% endblock %}

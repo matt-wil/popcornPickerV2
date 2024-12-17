@@ -1,13 +1,63 @@
 * {
     color: whitesmoke;
 }
+
 body{
-    background-color: #333366;
+    background-color: rgb(211, 50, 60);
     display: flex;
     justify-content: center;
     color: whitesmoke;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+a {
+    text-decoration: none;
+    color: orange;
+}
+
+.button-container {
+  text-align: center;
+  background-color: black;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.add-movie-button {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    color: black;
+    opacity: 0.5;
+}
+
+.add-movie-button:hover {
+    opacity: 1;
+    transform: translateY(0);
+    filter: brightness(1);
+    transform: translateZ(200px);
+}
+
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #ff0000;
+}
+
 .list-movies-title{
     display: flex;
     justify-content: center;
@@ -18,13 +68,18 @@ body{
 }
 
 .list{
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    width: 100%;
 }
+
 .movie{
-    display: inline-block;
+    flex: 0 1 calc(25% - 20px);
+    box-sizing: border-box;
     position: relative;
     overflow: hidden;
     width: auto;
@@ -32,6 +87,12 @@ body{
     transform: perspective(1000px);
     cursor: pointer;
     margin: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-width: 250px;
 }
 .movie img{
     width: 100%;
@@ -49,21 +110,24 @@ body{
     filter: brightness(1);
     transform: translateZ(200px);
 }
-/* movie country flag */
-.flag-container {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 24px;
-    height: 16px;
-    z-index: 10;
+
+/* Update Button Styling */
+.update-button {
+    display: inline-block;
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
-.country-flag {
-    width: 100%;
-    height: auto;
-    border-radius: 3px;
-    box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+.update-button:hover {
+    background-color: #45a049;
+    color: #fff;
 }
 
 /* writing overlay */
@@ -79,6 +143,7 @@ body{
     transform: translateY(20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .movie .text .movie-title,
 .movie .text .movie-rating,
 .movie .text .movie-year {
@@ -117,4 +182,23 @@ body{
 .list .movie:has(+ * + * + *:hover){
     filter: brightness(0.2);
     transform: translateZ(30px) rotateY(-10deg);
+}
+
+
+@media (max-width: 992px) {
+    .movie {
+        flex: 0 1 calc(33.333% - 20px); /* 3 movies per row */
+    }
+}
+
+@media (max-width: 768px) {
+    .movie {
+        flex: 0 1 calc(50% - 20px); /* 2 movies per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .movie {
+        flex: 0 1 calc(100% - 20px); /* 1 movie per row */
+    }
 }

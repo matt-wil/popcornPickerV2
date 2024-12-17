@@ -5,10 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1>PopcornPicker Users</h1>
+<main>
+    <h1>Users</h1>
+    <h3><a href="{{ url_for('add_user') }}">New User</a></h3>
             {% for user in users %}
-                <div class="user">
-                    <p><a href="/users/{{user.id}}" class="users-names">{{ user.name }}</a></p>
+                <div class="button-container">
+                    <button class="add-movie-button"><a href="/users/{{user.id}}" class="users-names">{{ user.name }}</a></button>
                 </div>
             {% endfor %}
+    <p><a href="{{ url_for('home') }}">Back</a></p>
+</main>
 {% endblock %}

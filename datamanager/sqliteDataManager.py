@@ -6,7 +6,8 @@ from .models import User, Movie, db
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 # Format
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 # Log to console
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)

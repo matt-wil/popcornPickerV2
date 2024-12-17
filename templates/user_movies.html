@@ -1,18 +1,49 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Users
+    {{ user_id.name }} Movies
 {% endblock %}
 
 {% block content %}
-    <h1>PopcornPicker Users</h1>
-        {% for movie in users_movies %}
-            <div class="user-movie">
-                <h2>{{ movie.title }}</h2>
-                <p><img src="{{ movie.img_url }}"></p>
-                <p>{{ movie.director }}</p>
-                <p>{{ movie.year }}</p>
-                <p>{{ movie.rating }}</p>
+<main>
+    {% if users_movies %}
+            <div class="list-movies-title">
+                 <h1>PopcornPicker</h1>
             </div>
+            <div class="list-movies-title">
+                <h3>Back to <a href="{{ url_for('list_users') }}">Users</a></h3>
+            </div>
+            <div class="add-movie-button">
+                <h2>
+                    <a href="{{ url_for('add_movie', user_id=user_id) }}">Add Movie</a>
+                </h2>
+            </div>
+
+    <div class="list">
+        {% for movie in users_movies %}
+                 <div class="movie">
+                     <a href="{{ movie.link }}" target="_blank">
+                     <img class="movie-poster" src="{{ movie.img_url }}">
+                    </a>
+                     <div class="text">
+                         <div class="movie-title">{{ movie.title }}</div>
+                         <div class="movie-year">Year: {{ movie.year }}</div>
+                         <div class="movie-rating">iMDb Rating: {{ movie.rating }}</div>
+                         <div class="movie-note"></div>
+                         <!-- BUTTONS: Update and Delete -->
+                         <!-- Update -->
+                         <a href="{{ url_for('update_movie', user_id=user_id, movie_id=movie.id) }}" class="update-button">Update</a>
+                         <!-- Delete -->
+                         <form method="POST" action="{{ url_for('delete_movie', user_id=user_id, movie_id=movie.id)}}">
+                            <button type="submit" class="delete-button">Delete</button>
+                         </form>
+                     </div>
+
+                 </div>
         {% endfor %}
+    </div>
+        {% else %}
+            <h2>No Movies added yet. <a href="{{ url_for('add_movie', user_id=user_id) }}">Add your first movie!</a></h2>
+        {% endif %}
+</main>
 {% endblock %}
