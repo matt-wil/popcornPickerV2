@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add Movie
+{% endblock %}
+
+{% block content %}
+    <h1>Update Movie</h1>
+    <p>Go to <a href="/users">Users Page</a></p>
+    <div class="movie-forms">
+        <form method="POST">
+            <label for="title"></label>
+            <input type="text" id="title" name="title" value="{{ movie.title }}" required>
+            <label for="year"></label>
+            <input type="text" id="year" name="year" value="{{ movie.year }}" required>
+            <label for="rating"></label>
+            <input type="text" id="rating" name="rating" value="{{ movie.rating }}" required>
+            <button type="submit">Update Movie</button>
+        </form>
+    </div>
+    <p>Back to <a href="{{ url_for('user_movies', user_id=user_id) }}">Movies</a></p>
+{% endblock %}

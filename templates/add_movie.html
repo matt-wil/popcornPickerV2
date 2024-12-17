@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add Movie
+{% endblock %}
+
+{% block content %}
+    <h1>Add Movie</h1>
+    <p>Go to <a href="/users">Users Page</a></p>
+    <div class="movie-forms">
+        <form method="POST">
+            <label for="title"></label>
+            <input type="text" id="title" name="title" required>
+            <button type="submit">Add Movie</button>
+        </form>
+    </div>
+{% endblock %}

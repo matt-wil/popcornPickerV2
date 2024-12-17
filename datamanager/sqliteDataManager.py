@@ -5,10 +5,16 @@ from .models import User, Movie, db
 # Create a logger instance
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+# Format
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# Log to console
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+# Log to file
+file_handler = logging.FileHandler("logs/app.logs")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 
 class SQLiteDataManager(DataManagerInterface):
@@ -60,6 +66,7 @@ class SQLiteDataManager(DataManagerInterface):
         try:
             movie = Movie.query.get(movie_id)
             if not movie:
+                logger.error(f"Movie with ID {movie_id} not found.")
                 print(f"Movie with ID {movie_id} not found.")
                 return None
             for key, value in updated_data.items():

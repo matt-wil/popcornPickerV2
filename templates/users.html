@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Users
+{% endblock %}
+
+{% block content %}
+    <h1>PopcornPicker Users</h1>
+            {% for user in users %}
+                <div class="user">
+                    <p><a href="/users/{{user.id}}" class="users-names">{{ user.name }}</a></p>
+                </div>
+            {% endfor %}
+{% endblock %}
