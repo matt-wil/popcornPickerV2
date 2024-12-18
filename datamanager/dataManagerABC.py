@@ -6,8 +6,10 @@ class DataManagerInterface(ABC):
 
     @abstractmethod
     def get_all_users(self):
+        """Get all users from the database"""
         pass
 
     @abstractmethod
     def get_user_movies(self, user_id):
+        """Get all movies from the database"""
         pass

@@ -4,6 +4,14 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
+    """
+    User model with a name and a one-to-many relationship to Movie.
+
+    Attributes:
+        id (int): Unique identifier for the user.
+        name (str): The name of the user.
+        movies (list[Movie]): The movies added by the user.
+    """
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -13,6 +21,20 @@ class User(db.Model):
 
 
 class Movie(db.Model):
+    """
+    Movie model representing a movie entry in the database with a relationship to a User.
+
+    Attributes:
+        id (int): Unique identifier for the movie.
+        user_id (int): Identifier for the user who added the movie, references User.id.
+        title (str): Title of the movie.
+        director (str): Director of the movie.
+        year (int): Release year of the movie.
+        rating (float): Rating of the movie.
+        img_url (str, optional): URL for the movie's image.
+        link (str, optional): Link to more information about the movie.
+        user (User): User object representing the owner of the movie.
+    """
     __tablename__ = 'movies'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

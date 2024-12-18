@@ -12,7 +12,24 @@ OMDb_url = "http://www.omdbapi.com/?apikey="
 
 def retrieve_all_movie_data(title, api=api_key, url=OMDb_url, search_type="&t="):
     """
-    Returns the response from the OMDB API plus and full link for the movie
+    Retrieves all movie data from the OMDb API
+
+    Parameters:
+    title (str): The title of the movie to search for
+    api (str): The API key to use for the OMDb API
+    url (str): The URL of the OMDb API
+    search_type (str): The search type to use (default "&t=")
+
+    Returns:
+    tuple: A tuple of movie data and the IMDb link for the movie
+
+    Raises:
+    ValueError: If the API key is not found
+    HTTPError: If the API request returns an HTTP error
+    ConnectionError: If the API request cannot connect to the API
+    Timeout: If the API request times out
+    RequestException: If any other error occurs during the API request
+    Exception: If any other error occurs
     """
     if not api:
         logger.error(
