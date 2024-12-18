@@ -7,12 +7,12 @@
 {% block content %}
 <main>
     <h1>Users</h1>
-    <h3><a href="{{ url_for('add_user') }}">New User</a></h3>
+    <h3><a href="{{ url_for('add_user') }}" class="page-linker">Create User</a></h3>
             {% for user in users %}
                 <div class="button-container">
                     <button class="add-movie-button"><a href="/users/{{user.id}}" class="users-names">{{ user.name }}</a></button>
                 </div>
             {% endfor %}
-    <p><a href="{{ url_for('home') }}">Back</a></p>
+    <p><a href="{{ url_for('home') }}" class="page-linker">Back</a></p>
 </main>
 {% endblock %}

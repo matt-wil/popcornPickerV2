@@ -68,3 +68,8 @@ KeyError: 'imdbID'
 2024-12-17 22:18:12,938 - datamanager.sqliteDataManager - INFO - Successfully retrieved movie data for: Friends
 2024-12-17 22:18:12,946 - datamanager.sqliteDataManager - INFO - Movie Friends added successfully for user 4
 2024-12-17 22:21:05,021 - datamanager.sqliteDataManager - INFO - Movie with ID 10 deleted successfully.
+2024-12-17 22:52:52,118 - datamanager.sqliteDataManager - INFO - Successfully retrieved movie data for: 300
+2024-12-17 22:52:52,132 - datamanager.sqliteDataManager - INFO - Movie 300 added successfully for user 11
+2024-12-18 09:31:04,633 - datamanager.sqliteDataManager - INFO - Successfully retrieved movie data for: Inglorious bastards
+2024-12-18 09:31:04,641 - datamanager.sqliteDataManager - INFO - Movie The Inglorious Bastards added successfully for user 12
+2024-12-18 09:31:28,476 - datamanager.sqliteDataManager - INFO - Movie with ID 23 deleted successfully.

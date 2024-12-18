@@ -1,18 +1,32 @@
-* {
-    color: whitesmoke;
-}
-
+/*
+E63946  #red
+F1FAEE  #light light blue
+A8DADC  #light blue
+457B9D  #blue
+1D3557  #dark blue
+*/
 body{
-    background-color: rgb(211, 50, 60);
+    background-color: #E63946;
     display: flex;
     justify-content: center;
-    color: whitesmoke;
+    color: #F1FAEE;
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+h1 {
+ color: #1D3557;
+ font-size: 5vw;
+ text-align: center;
 }
 
 a {
     text-decoration: none;
-    color: orange;
+    color: #F1FAEE;
+}
+
+.page-linker:hover {
+    color: #1D3557;
 }
 
 .button-container {
