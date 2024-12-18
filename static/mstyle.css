@@ -4,9 +4,15 @@ F1FAEE  #light light blue
 A8DADC  #light blue
 457B9D  #blue
 1D3557  #dark blue
+
+classic cinema
+#ffd700  gold   head
+#221f1f  black  bg
+#b80f0a  red    accents links etc
+light for content
 */
 body{
-    background-color: #E63946;
+    background-color: #221f1f;
     display: flex;
     justify-content: center;
     color: #F1FAEE;
@@ -14,10 +20,20 @@ body{
     text-align: center;
 }
 
+body.homepage {
+    background-color: rgb(205, 52, 60);
+}
+
+body.homepage a:hover {
+    color: #FFD700;
+}
+
 h1 {
- color: #1D3557;
- font-size: 5vw;
- text-align: center;
+    font-family: Impact, sans-serif;
+    font-weight: 700;
+    color: #FFD700;
+    font-size: 5vw;
+    text-align: center;
 }
 
 a {
@@ -26,7 +42,7 @@ a {
 }
 
 .page-linker:hover {
-    color: #1D3557;
+    color: #E63946;
 }
 
 .button-container {

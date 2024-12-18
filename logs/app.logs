@@ -73,3 +73,81 @@ KeyError: 'imdbID'
 2024-12-18 09:31:04,633 - datamanager.sqliteDataManager - INFO - Successfully retrieved movie data for: Inglorious bastards
 2024-12-18 09:31:04,641 - datamanager.sqliteDataManager - INFO - Movie The Inglorious Bastards added successfully for user 12
 2024-12-18 09:31:28,476 - datamanager.sqliteDataManager - INFO - Movie with ID 23 deleted successfully.
+2024-12-18 10:15:20,676 - datamanager.sqliteDataManager - INFO - Successfully retrieved movie data for: gone in 60 seconds
+2024-12-18 10:15:20,689 - datamanager.sqliteDataManager - INFO - Movie Gone in 60 Seconds added successfully for user 13
+2024-12-18 10:15:42,694 - datamanager.sqliteDataManager - ERROR - Error updating movie: (builtins.ValueError) could not convert string to float: 'i can edit'
+[SQL: UPDATE movies SET title=?, year=?, rating=? WHERE movies.id = ?]
+[parameters: [{'rating': 'i can edit', 'year': 'that', 'title': 'crazy', 'movies_id': 7}]]
+Traceback (most recent call last):
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1815, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 1476, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "lib/sqlalchemy/cyextension/processors.pyx", line 27, in sqlalchemy.cyextension.processors.to_float
+ValueError: could not convert string to float: 'i can edit'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/popcornPickerV2/datamanager/sqliteDataManager.py", line 133, in update_movie
+    self.db.session.commit()
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/scoping.py", line 597, in commit
+    return self._proxied.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2028, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1313, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1288, in _prepare_impl
+    self.session.flush()
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4352, in flush
+    self._flush(objects)
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4487, in _flush
+    with util.safe_reraise():
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4448, in _flush
+    flush_context.execute()
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 85, in save_obj
+    _emit_update_statements(
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 912, in _emit_update_statements
+    c = connection.execute(
+        ^^^^^^^^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1821, in _execute_context
+    self._handle_dbapi_exception(
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1815, in _execute_context
+    context = constructor(
+              ^^^^^^^^^^^^
+  File "/Users/mattwilliams/PycharmProjects/popcornPickerV2/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 1476, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+  File "lib/sqlalchemy/cyextension/processors.pyx", line 27, in sqlalchemy.cyextension.processors.to_float
+sqlalchemy.exc.StatementError: (builtins.ValueError) could not convert string to float: 'i can edit'
+[SQL: UPDATE movies SET title=?, year=?, rating=? WHERE movies.id = ?]
+[parameters: [{'rating': 'i can edit', 'year': 'that', 'title': 'crazy', 'movies_id': 7}]]
+2024-12-18 10:16:20,084 - datamanager.sqliteDataManager - INFO - Movie with ID 7 deleted successfully.
+2024-12-18 10:16:35,378 - datamanager.sqliteDataManager - INFO - Successfully retrieved movie data for: Australia
+2024-12-18 10:16:35,393 - datamanager.sqliteDataManager - INFO - Movie Australia added successfully for user 1

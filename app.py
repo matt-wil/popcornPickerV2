@@ -1,6 +1,6 @@
 # ___ FLASK FILE ___ #
 from flask import Flask, render_template, redirect, request, url_for
-from datamanager.models import db, User, Movie
+from datamanager.models import db, Movie
 from datamanager.sqliteDataManager import SQLiteDataManager, logger
 from utilities import retrieve_all_movie_data
 
