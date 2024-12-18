@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+    New User
+{% endblock %}
+
+{% block content %}
+<main>
+<div>
+    <h1>New User</h1>
+</div>
+    <p>Go to <a href="{{ url_for('list_users')}}" class="page-linker">Users Page</a></p>
+    <div class="movie-forms">
+        <form method="POST">
+            <label for="name"></label>
+            <input type="text" id="name" name="name" placeholder="users name" required>
+            <button type="submit">Add User</button>
+        </form>
+    </div>
+</main>
+{% endblock %}
