@@ -2,7 +2,7 @@
 playground.py
 config.py
 tests
-logs
+logs/
 .logs
 
 # Byte-compiled / optimized / DLL files
