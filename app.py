@@ -5,20 +5,20 @@ from datamanager.sqliteDataManager import SQLiteDataManager, logger
 from utilities import retrieve_all_movie_data
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object("config")
 
 db.init_app(app)
 
 data_manager = SQLiteDataManager(app)
 
 
-@app.route('/', methods=['GET'])
+@app.route("/", methods=["GET"])
 def home():
     """Home page for the application. Returns the template 'home.html'."""
-    return render_template('home.html')
+    return render_template("home.html")
 
 
-@app.route('/users')
+@app.route("/users")
 def list_users():
     """Retrieve and display a list of all users.
 
@@ -30,10 +30,10 @@ def list_users():
     """
 
     users = data_manager.get_all_users()
-    return render_template('users.html', users=users)
+    return render_template("users.html", users=users)
 
 
-@app.route('/users/<int:user_id>', methods=['GET'])
+@app.route("/users/<int:user_id>", methods=["GET"])
 def user_movies(user_id):
     """
     Retrieve and display a list of all movies associated with a user.
@@ -48,10 +48,12 @@ def user_movies(user_id):
         The rendered 'user_movies.html' template populated with movie data.
     """
     users_movies = data_manager.get_user_movies(user_id=user_id)
-    return render_template('user_movies.html', users_movies=users_movies, user_id=user_id)
+    return render_template(
+        "user_movies.html", users_movies=users_movies, user_id=user_id
+    )
 
 
-@app.route('/add_user', methods=['GET', 'POST'])
+@app.route("/add_user", methods=["GET", "POST"])
 def add_user():
     """
     Handle adding a new user to the database.
@@ -63,14 +65,14 @@ def add_user():
     Returns:
         The rendered 'add_user.html' template or a redirect response.
     """
-    if request.method == 'POST':
-        name = request.form['name']
+    if request.method == "POST":
+        name = request.form["name"]
         data_manager.add_user(name)
-        return redirect(url_for('home'))
-    return render_template('add_user.html')
+        return redirect(url_for("home"))
+    return render_template("add_user.html")
 
 
-@app.route('/users/<int:user_id>/add_movie', methods=['GET', 'POST'])
+@app.route("/users/<int:user_id>/add_movie", methods=["GET", "POST"])
 def add_movie(user_id):
     """
     Handle adding a new movie to a user's collection.
@@ -89,38 +91,40 @@ def add_movie(user_id):
         If POST and failure: An error message and HTTP status code.
     """
 
-    if request.method == 'POST':
-        movie_title = request.form['title']
+    if request.method == "POST":
+        movie_title = request.form["title"]
 
         movie_info, movie_link = retrieve_all_movie_data(movie_title)
-        if not movie_info or movie_info.get('Response') != 'True':
+        if not movie_info or movie_info.get("Response") != "True":
             logger.error(f"Failed to fetcha data for movie: {movie_title}")
             return "Failed to fetch movie data from OMDb API", 400
 
         existing_movies = data_manager.get_user_movies(user_id)
-        if any(movie.title == movie_info['Title'] for movie in existing_movies):
+        if any(movie.title == movie_info["Title"] for movie in existing_movies):
             logger.warning(
-                f"Movie '{movie_info['Title']}' already exists for user {user_id}.")
+                f"Movie '{movie_info['Title']}' already exists for user {user_id}."
+            )
             return "Movie already exists in the list.", 400
 
-        if movie_info['Response'] == 'True':
+        if movie_info["Response"] == "True":
             movie_entry = {
-                'title': movie_info['Title'],
-                'year': movie_info['Year'],
-                'director': movie_info['Director'],
-                'rating': movie_info['imdbRating'],
-                'img_url': movie_info['Poster'],
-                'link': movie_link,
-                'user_id': user_id
+                "title": movie_info["Title"],
+                "year": movie_info["Year"],
+                "director": movie_info["Director"],
+                "rating": movie_info["imdbRating"],
+                "img_url": movie_info["Poster"],
+                "link": movie_link,
+                "user_id": user_id,
             }
             data_manager.add_movie(movie_entry)
             logger.info(
-                f"Movie {movie_info['Title']} added successfully for user {user_id}")
-            return redirect(url_for('user_movies', user_id=user_id))
-    return render_template('add_movie.html', user_id=user_id)
+                f"Movie {movie_info['Title']} added successfully for user {user_id}"
+            )
+            return redirect(url_for("user_movies", user_id=user_id))
+    return render_template("add_movie.html", user_id=user_id)
 
 
-@app.route('/users/<int:user_id>/update_movie/<int:movie_id>', methods=['GET', 'POST'])
+@app.route("/users/<int:user_id>/update_movie/<int:movie_id>", methods=["GET", "POST"])
 def update_movie(user_id, movie_id):
     """
     Handle updating a movie associated with a user.
@@ -141,21 +145,22 @@ def update_movie(user_id, movie_id):
         If POST and failure: An error message and HTTP status code.
         If GET: The rendered 'update_movie.html' template.
     """
-    if request.method == 'POST':
-        key_list = ['title', 'year', 'rating', 'director']
-        updated_data = {key: request.form[key]
-                        for key in key_list if key in request.form}
+    if request.method == "POST":
+        key_list = ["title", "year", "rating", "director"]
+        updated_data = {
+            key: request.form[key] for key in key_list if key in request.form
+        }
 
         data_manager.update_movie(movie_id, updated_data=updated_data)
-        return redirect(url_for('user_movies', user_id=user_id))
+        return redirect(url_for("user_movies", user_id=user_id))
 
     movie = Movie.query.get(movie_id)
     if not movie or movie.user_id != user_id:
         return "Movie not found", 404
-    return render_template('update_movie.html', movie=movie, user_id=user_id)
+    return render_template("update_movie.html", movie=movie, user_id=user_id)
 
 
-@app.route('/users/<int:user_id>/delete_movie/<int:movie_id>', methods=['POST'])
+@app.route("/users/<int:user_id>/delete_movie/<int:movie_id>", methods=["POST"])
 def delete_movie(user_id, movie_id):
     """
     Handle deleting a movie associated with a user.
@@ -177,7 +182,7 @@ def delete_movie(user_id, movie_id):
         logger.error(f"Failed to delete movie: {movie_id}")
         return "Failed to delete movie", 400
     logger.info(f"Movie with ID {movie_id} deleted successfully.")
-    return redirect(url_for('user_movies', user_id=user_id))
+    return redirect(url_for("user_movies", user_id=user_id))
 
 
 # error handling
@@ -192,7 +197,7 @@ def not_found_error(error):
     Returns:
         A tuple containing the rendered '404.html' template and the 404 status code.
     """
-    return render_template('404.html'), 404
+    return render_template("404.html"), 404
 
 
 @app.errorhandler(405)
@@ -206,7 +211,7 @@ def method_not_allowed_error(error):
     Returns:
         A tuple containing the rendered '405.html' template and the 405 status code.
     """
-    return render_template('405.html'), 405
+    return render_template("405.html"), 405
 
 
 @app.errorhandler(500)
@@ -220,10 +225,10 @@ def internal_server_error(error):
     Returns:
         A tuple containing the rendered '500.html' template and the 500 status code.
     """
-    return render_template('500.html'), 500
+    return render_template("500.html"), 500
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # with app.app_context():
     #     db.session.add(User(name="Matt"))
     #     db.session.add(User(name="Sabrina"))

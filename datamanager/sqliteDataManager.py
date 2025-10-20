@@ -1,13 +1,12 @@
 import logging
-from popcornPickerV2.datamanager.dataManagerABC import DataManagerInterface
+from .dataManagerABC import DataManagerInterface
 from .models import User, Movie, db
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 # Format
-formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 # Log to console
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)
